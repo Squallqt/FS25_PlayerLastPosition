@@ -106,15 +106,6 @@ Restore triggers only when:
 
 Prevents premature teleport.
 
-## Roadmap
-
-### v1.1.0.0 (Planned)
-
--   Optional configurable restore delay
--   Admin command to reset stored position
--   Debug logging toggle
--   Position backup rotation system
-
 ## Support
 
 -   **Issues**: GitHub Issues
