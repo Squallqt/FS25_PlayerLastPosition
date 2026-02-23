@@ -108,8 +108,8 @@ Prevents premature teleport.
 
 ## Support
 
--   **Issues**: GitHub Issues
--   **Discussions**: GitHub Discussions
+- **Issues**: [GitHub Issues](https://github.com/Squallqt/FS25_PlayerLastPosition/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Squallqt/FS25_PlayerLastPosition/discussions)
 
 ## License
 
