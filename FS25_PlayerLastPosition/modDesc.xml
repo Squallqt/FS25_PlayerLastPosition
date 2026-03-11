@@ -2,7 +2,7 @@
 <modDesc descVersion="106">
 
     <author>Squallqt</author>
-    <version>1.0.0.0</version>
+    <version>1.0.0.1</version>
 
     <title>
         <en>Player Last Position</en>
@@ -16,11 +16,19 @@ Players are teleported back to their last position on reconnection.
 Works on foot and in vehicles.
 Compatible with singleplayer, multiplayer and dedicated servers.
 
+Changelog:
+1.0.0.1 - Fixed saved positions being shared across different savegames
+1.0.0.0 - Initial release
+
 GitHub repository: https://github.com/Squallqt/FS25_PlayerLastPosition]]></en>
         <fr><![CDATA[Mémorise la position de chaque joueur à la déconnexion, indépendamment de la sauvegarde serveur.
 Les joueurs sont téléportés à leur dernière position à la reconnexion.
 Fonctionne à pied et en véhicule.
 Compatible solo, multijoueur et serveur dédié.
+
+Changelog :
+1.0.0.1 - Correction des positions partagées entre différentes sauvegardes
+1.0.0.0 - Version initiale
 
 Dépôt GitHub : https://github.com/Squallqt/FS25_PlayerLastPosition]]></fr>
         <de><![CDATA[Speichert die Position jedes Spielers beim Trennen, unabhängig vom Server-Speicherzyklus.
@@ -28,16 +36,12 @@ Spieler werden bei Wiederverbindung an ihre letzte Position teleportiert.
 Funktioniert zu Fuß und in Fahrzeugen.
 Kompatibel mit Einzelspieler, Mehrspieler und dedizierten Servern.
 
+Changelog:
+1.0.0.1 - Gespeicherte Positionen werden nicht mehr zwischen Spielständen geteilt
+1.0.0.0 - Erstveröffentlichung
+
 GitHub-Repository: https://github.com/Squallqt/FS25_PlayerLastPosition]]></de>
     </description>
-
-    <changelog>
-        <version>
-            <en>1.0.0.0 - Initial release</en>
-            <fr>1.0.0.0 - Version initiale</fr>
-            <de>1.0.0.0 - Erstveröffentlichung</de>
-        </version>
-    </changelog>
 
     <multiplayer supported="true"/>
 

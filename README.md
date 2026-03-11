@@ -3,7 +3,7 @@
 Automatic per-player position persistence for Farming Simulator 25
 multiplayer and singleplayer sessions.
 
-[![Version](https://img.shields.io/badge/version-1.0.0.0-blue.svg)](#)
+[![Version](https://img.shields.io/badge/version-1.0.0.1-blue.svg)](#)
 [![FS25](https://img.shields.io/badge/FS25-compatible-green.svg)](https://farming-simulator.com/)
 [![Multiplayer](https://img.shields.io/badge/multiplayer-supported-success.svg)](#)
 [![Server-Side](https://img.shields.io/badge/server--side-only-important.svg)](#)
@@ -75,9 +75,9 @@ position
 
 ### Storage Location
 
-    [UserProfile]/modSettings/FS25_PlayerLastPosition/<uniqueUserId>.xml
+    [UserProfile]/modSettings/FS25_PlayerLastPosition/savegame<index>/<uniqueUserId>.xml
 
-Each player has an independent file.
+Each player has an independent file, scoped per savegame.
 
 ## Technical
 
@@ -106,19 +106,10 @@ Restore triggers only when:
 
 Prevents premature teleport.
 
-## Roadmap
-
-### v1.1.0.0 (Planned)
-
--   Optional configurable restore delay
--   Admin command to reset stored position
--   Debug logging toggle
--   Position backup rotation system
-
 ## Support
 
--   **Issues**: GitHub Issues
--   **Discussions**: GitHub Discussions
+- **Issues**: [GitHub Issues](https://github.com/Squallqt/FS25_PlayerLastPosition/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Squallqt/FS25_PlayerLastPosition/discussions)
 
 ## License
 
