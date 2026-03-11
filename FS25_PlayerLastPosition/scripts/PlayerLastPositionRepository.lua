@@ -8,6 +8,44 @@
 PlayerLastPositionRepository = {}
 
 PlayerLastPositionRepository.MOD_SETTINGS_DIR = "modSettings/FS25_PlayerLastPosition/"
+PlayerLastPositionRepository.savegameId = nil
+PlayerLastPositionRepository.generation = nil
+
+function PlayerLastPositionRepository.initialize()
+    PlayerLastPositionRepository.savegameId = "savegame" .. tostring(g_currentMission.missionInfo.savegameIndex)
+
+    local baseDir = getUserProfileAppPath() .. PlayerLastPositionRepository.MOD_SETTINGS_DIR
+    createFolder(baseDir)
+    local slotDir = baseDir .. PlayerLastPositionRepository.savegameId .. "/"
+    createFolder(slotDir)
+    local genFilePath = slotDir .. "_generation.xml"
+
+    if not g_currentMission.missionInfo.isValid then
+        local oldGen = 0
+        if fileExists(genFilePath) then
+            local xmlId = loadXMLFile("plpGen", genFilePath)
+            if xmlId ~= nil and xmlId ~= 0 then
+                oldGen = getXMLInt(xmlId, "generation#value") or 0
+                delete(xmlId)
+            end
+        end
+        PlayerLastPositionRepository.generation = oldGen + 1
+        local xmlId = createXMLFile("plpGen", genFilePath, "generation")
+        if xmlId ~= nil and xmlId ~= 0 then
+            setXMLInt(xmlId, "generation#value", PlayerLastPositionRepository.generation)
+            saveXMLFile(xmlId)
+            delete(xmlId)
+        end
+    else
+        if fileExists(genFilePath) then
+            local xmlId = loadXMLFile("plpGen", genFilePath)
+            if xmlId ~= nil and xmlId ~= 0 then
+                PlayerLastPositionRepository.generation = getXMLInt(xmlId, "generation#value")
+                delete(xmlId)
+            end
+        end
+    end
+end
 
 ---@param playerKey string
 ---@param x number
@@ -24,6 +62,9 @@ function PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
     setXMLFloat(xmlId, "position#y", y)
     setXMLFloat(xmlId, "position#z", z)
     setXMLFloat(xmlId, "position#yaw", yaw)
+    if PlayerLastPositionRepository.generation ~= nil then
+        setXMLInt(xmlId, "position#gen", PlayerLastPositionRepository.generation)
+    end
     saveXMLFile(xmlId)
     delete(xmlId)
 
@@ -46,7 +87,15 @@ function PlayerLastPositionRepository.load(playerKey)
     local y   = getXMLFloat(xmlId, "position#y")
     local z   = getXMLFloat(xmlId, "position#z")
     local yaw = getXMLFloat(xmlId, "position#yaw")
+    local gen = getXMLInt(xmlId, "position#gen")
     delete(xmlId)
+
+    local currentGen = PlayerLastPositionRepository.generation
+    if currentGen ~= nil and gen ~= currentGen then
+        deleteFile(filePath)
+        return nil
+    end
+
     if x == nil or y == nil or z == nil then
         return nil
     end
@@ -65,7 +114,9 @@ end
 ---@param playerKey string
 ---@return string
 function PlayerLastPositionRepository.getFilePath(playerKey)
-    local dir = getUserProfileAppPath() .. PlayerLastPositionRepository.MOD_SETTINGS_DIR
+    local baseDir = getUserProfileAppPath() .. PlayerLastPositionRepository.MOD_SETTINGS_DIR
+    createFolder(baseDir)
+    local dir = baseDir .. PlayerLastPositionRepository.savegameId .. "/"
     createFolder(dir)
     return dir .. PlayerLastPositionRepository.sanitizeKey(playerKey) .. ".xml"
 end
