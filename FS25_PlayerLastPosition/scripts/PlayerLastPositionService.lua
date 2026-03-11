@@ -30,6 +30,7 @@ function PlayerLastPositionService.new()
 end
 
 function PlayerLastPositionService:initialize()
+    PlayerLastPositionRepository.initialize()
     Player.delete        = Utils.prependedFunction(Player.delete, PlayerLastPositionService.onPlayerDelete)
     FSBaseMission.update = Utils.appendedFunction(FSBaseMission.update, PlayerLastPositionService.onUpdate)
 end
