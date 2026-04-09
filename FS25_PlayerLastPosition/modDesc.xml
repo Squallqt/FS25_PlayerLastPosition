@@ -1,54 +1,84 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<modDesc descVersion="106">
-
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="107">
     <author>Squallqt</author>
-    <version>1.0.0.1</version>
-
+    <version>1.0.1.0</version>
     <title>
         <en>Player Last Position</en>
-        <fr>Dernière Position Du Joueur</fr>
         <de>Letzte Spielerposition</de>
+        <fr>Dernière Position Du Joueur</fr>
+        <pl>Ostatnia Pozycja Gracza</pl>
     </title>
-
     <description>
         <en><![CDATA[Saves each player's position on disconnect, independently of the server save cycle.
 Players are teleported back to their last position on reconnection.
 Works on foot and in vehicles.
 Compatible with singleplayer, multiplayer and dedicated servers.
 
+GitHub repository: https://github.com/Squallqt/FS25_PlayerLastPosition
+
 Changelog:
-1.0.0.1 - Fixed saved positions being shared across different savegames
-1.0.0.0 - Initial release
 
-GitHub repository: https://github.com/Squallqt/FS25_PlayerLastPosition]]></en>
-        <fr><![CDATA[Mémorise la position de chaque joueur à la déconnexion, indépendamment de la sauvegarde serveur.
-Les joueurs sont téléportés à leur dernière position à la reconnexion.
-Fonctionne à pied et en véhicule.
-Compatible solo, multijoueur et serveur dédié.
-
-Changelog :
-1.0.0.1 - Correction des positions partagées entre différentes sauvegardes
-1.0.0.0 - Version initiale
-
-Dépôt GitHub : https://github.com/Squallqt/FS25_PlayerLastPosition]]></fr>
+1.0.1.0:
+- Save position on game save to handle singleplayer Alt+F4 edge case
+- Fix player rotation not being restored on reconnect
+1.0.0.1:
+- Fix saved positions being shared across different savegames
+1.0.0.0:
+- Initial release]]></en>
         <de><![CDATA[Speichert die Position jedes Spielers beim Trennen, unabhängig vom Server-Speicherzyklus.
 Spieler werden bei Wiederverbindung an ihre letzte Position teleportiert.
 Funktioniert zu Fuß und in Fahrzeugen.
 Kompatibel mit Einzelspieler, Mehrspieler und dedizierten Servern.
 
+GitHub-Repository: https://github.com/Squallqt/FS25_PlayerLastPosition
+
 Changelog:
-1.0.0.1 - Gespeicherte Positionen werden nicht mehr zwischen Spielständen geteilt
-1.0.0.0 - Erstveröffentlichung
 
-GitHub-Repository: https://github.com/Squallqt/FS25_PlayerLastPosition]]></de>
+1.0.1.0:
+- Position wird beim Spielstand-Speichern gesichert (Einzelspieler Alt+F4 Sonderfall)
+- Spielerrotation wird jetzt beim Wiederherstellen korrekt angewendet
+1.0.0.1:
+- Gespeicherte Positionen werden nicht mehr zwischen Spielständen geteilt
+1.0.0.0:
+- Erstveröffentlichung]]></de>
+        <fr><![CDATA[Mémorise la position de chaque joueur à la déconnexion, indépendamment de la sauvegarde serveur.
+Les joueurs sont téléportés à leur dernière position à la reconnexion.
+Fonctionne à pied et en véhicule.
+Compatible solo, multijoueur et serveur dédié.
+
+Dépôt GitHub : https://github.com/Squallqt/FS25_PlayerLastPosition
+
+Changelog :
+
+1.0.1.0 :
+- Sauvegarde de la position lors de la sauvegarde de partie (edge case Alt+F4 en solo)
+- Correction de la rotation du joueur non restaurée à la reconnexion
+1.0.0.1 :
+- Correction des positions partagées entre différentes sauvegardes
+1.0.0.0 :
+- Version initiale]]></fr>
+        <pl><![CDATA[Zapisuje pozycję każdego gracza przy rozłączeniu, niezależnie od cyklu zapisu serwera.
+Gracze są teleportowani na ostatnią pozycję po ponownym połączeniu.
+Działa pieszo i w pojazdach.
+Kompatybilny z trybem jednoosobowym, wieloosobowym i serwerami dedykowanymi.
+
+Repozytorium GitHub: https://github.com/Squallqt/FS25_PlayerLastPosition
+
+Changelog:
+
+1.0.1.0:
+- Zapis pozycji podczas zapisywania gry (przypadek Alt+F4 w trybie jednoosobowym)
+- Korekta rotacji gracza nieodtwarzanej przy ponownym połączeniu
+1.0.0.1:
+- Korekta pozycji współdzielonych między różnymi zapisami gry
+1.0.0.0:
+- Pierwsza wersja]]></pl>
     </description>
-
-    <multiplayer supported="true"/>
-
     <iconFilename>icon_PlayerLastPosition.dds</iconFilename>
+    <multiplayer supported="true" />
 
     <extraSourceFiles>
-        <sourceFile filename="scripts/Main.lua"/>
+        <sourceFile filename="scripts/Main.lua" />
     </extraSourceFiles>
 
 </modDesc>

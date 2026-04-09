@@ -1,26 +1,16 @@
---[[
-    PlayerLastPositionService.lua
-    Player lifecycle hooks: save on disconnect, restore on reconnect.
-    Server-side only.
-
-    Save: prependedFunction on Player.delete runs BEFORE the engine
-    ejects the player from the vehicle (Player.lua:583), so
-    getCurrentVehicle() still returns the active vehicle.
-
-    Restore: the engine parks new players at y=-200 (Player.lua:483)
-    then repositions them at the spawn point. We poll rootNode.y and
-    teleport once the player leaves the parking zone (y > -100).
-
-    Author: Squallqt
-]]
-
+-- Copyright © 2026 Squallqt. All rights reserved.
+-- Player lifecycle hooks: save on disconnect and game save, restore on reconnect. Server-side only.
+-- Save: overwrittenFunction on Player.createData persists position on every serialization (disconnect, game save, Alt+F4).
+-- Cleanup: prependedFunction on Player.delete clears tracking state only (no save — onCreateData already handles it).
+-- Restore: the engine parks new players at y=-200 then repositions them at spawn. We poll rootNode.y and teleport once the player leaves the parking zone (y > -100).
 PlayerLastPositionService = {}
 local PlayerLastPositionService_mt = Class(PlayerLastPositionService)
 
 PlayerLastPositionService.TIMEOUT_MS       = 15000
 PlayerLastPositionService.PARKING_Y_THRESH = -100
 
----@return PlayerLastPositionService
+---Create service instance
+-- @return PlayerLastPositionService instance
 function PlayerLastPositionService.new()
     local self = setmetatable({}, PlayerLastPositionService_mt)
     self.knownPlayers    = {}
@@ -29,25 +19,23 @@ function PlayerLastPositionService.new()
     return self
 end
 
+---Register engine hooks for save, restore and serialization
 function PlayerLastPositionService:initialize()
     PlayerLastPositionRepository.initialize()
     Player.delete        = Utils.prependedFunction(Player.delete, PlayerLastPositionService.onPlayerDelete)
+    Player.createData    = Utils.overwrittenFunction(Player.createData, PlayerLastPositionService.onCreateData)
     FSBaseMission.update = Utils.appendedFunction(FSBaseMission.update, PlayerLastPositionService.onUpdate)
 end
 
+---Release references on mission end
 function PlayerLastPositionService:cleanup()
     self.knownPlayers    = nil
     self.pendingRestores = nil
 end
 
--- Save ----------------------------------------------------------------------
-
----@param player table
-function PlayerLastPositionService.onPlayerDelete(player)
-    if player == nil or g_server == nil then
-        return
-    end
-
+---Capture and persist current player position to XML
+-- @param table player Player instance
+function PlayerLastPositionService.savePlayerPosition(player)
     local playerKey = PlayerLastPositionService.getPlayerKey(player)
     if playerKey == nil then
         return
@@ -84,12 +72,6 @@ function PlayerLastPositionService.onPlayerDelete(player)
         end
     end
 
-    local service = PlayerLastPosition.service
-    if service ~= nil and service.knownPlayers ~= nil then
-        service.knownPlayers[playerKey] = nil
-        service.hasWork = true
-    end
-
     if not PlayerLastPositionService.isPositionValid(x, y, z, yaw) then
         return
     end
@@ -97,10 +79,38 @@ function PlayerLastPositionService.onPlayerDelete(player)
     PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
 end
 
--- Restore -------------------------------------------------------------------
+---Clear tracking on player disconnect (save handled by onCreateData)
+-- @param table player Player instance
+function PlayerLastPositionService.onPlayerDelete(player)
+    if player == nil or g_server == nil then
+        return
+    end
 
----@param mission table
----@param dt number
+    local service = PlayerLastPosition.service
+    local playerKey = PlayerLastPositionService.getPlayerKey(player)
+    if playerKey ~= nil and service ~= nil and service.knownPlayers ~= nil then
+        service.knownPlayers[playerKey] = nil
+        service.hasWork = true
+    end
+end
+
+---Save position during engine serialization (covers savegame writes)
+-- @param table player Player instance
+-- @param function superFunc Original createData function
+-- @return table playerData Serialized player data
+function PlayerLastPositionService.onCreateData(player, superFunc, ...)
+    local playerData = superFunc(player, ...)
+
+    if g_server ~= nil then
+        PlayerLastPositionService.savePlayerPosition(player)
+    end
+
+    return playerData
+end
+
+---Detect new players and restore saved positions each frame
+-- @param table mission FSBaseMission instance
+-- @param number dt Delta time in milliseconds
 function PlayerLastPositionService.onUpdate(mission, dt)
     local service = PlayerLastPosition.service
     if service == nil or g_server == nil then
@@ -162,9 +172,10 @@ function PlayerLastPositionService.onUpdate(mission, dt)
             local safeY = math.max(pos.y, terrainY + 0.2)
 
             setWorldTranslation(player.rootNode, pos.x, safeY, pos.z)
+            setWorldRotation(player.rootNode, 0, pos.yaw, 0)
 
-            Logging.info("[PlayerLastPosition] Restored '%s' to (%.1f, %.1f, %.1f) after %dms",
-                PlayerLastPositionRepository.sanitizeKey(playerKey), pos.x, safeY, pos.z, entry.timer)
+            Logging.info("[PlayerLastPosition] Restored '%s' to (%.1f, %.1f, %.1f, yaw=%.2f) after %dms",
+                PlayerLastPositionRepository.sanitizeKey(playerKey), pos.x, safeY, pos.z, pos.yaw, entry.timer)
 
             PlayerLastPositionRepository.remove(playerKey)
             table.insert(toRemove, playerKey)
@@ -180,10 +191,9 @@ function PlayerLastPositionService.onUpdate(mission, dt)
     end
 end
 
--- Helpers -------------------------------------------------------------------
-
----@param player table
----@return string|nil
+---Resolve unique player key from available identifiers
+-- @param table player Player instance
+-- @return string|nil playerKey Unique key or nil if unresolvable
 function PlayerLastPositionService.getPlayerKey(player)
     if player.uniqueUserId ~= nil and player.uniqueUserId ~= "" then
         return tostring(player.uniqueUserId)
@@ -197,11 +207,12 @@ function PlayerLastPositionService.getPlayerKey(player)
     return nil
 end
 
----@param x number|nil
----@param y number|nil
----@param z number|nil
----@param yaw number|nil
----@return boolean
+---Validate position is within terrain bounds and not at origin
+-- @param number|nil x World X coordinate
+-- @param number|nil y World Y coordinate
+-- @param number|nil z World Z coordinate
+-- @param number|nil yaw Y rotation in radians
+-- @return boolean isValid True if position can be safely restored
 function PlayerLastPositionService.isPositionValid(x, y, z, yaw)
     if x == nil or y == nil or z == nil or yaw == nil then
         return false
