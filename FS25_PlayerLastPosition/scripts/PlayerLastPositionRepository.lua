@@ -1,16 +1,12 @@
---[[
-    PlayerLastPositionRepository.lua
-    XML persistence for player positions in modSettings/.
-
-    Author: Squallqt
-]]
-
+-- Copyright © 2026 Squallqt. All rights reserved.
+-- XML persistence for player positions in modSettings/. No business logic. No network.
 PlayerLastPositionRepository = {}
 
 PlayerLastPositionRepository.MOD_SETTINGS_DIR = "modSettings/FS25_PlayerLastPosition/"
 PlayerLastPositionRepository.savegameId = nil
 PlayerLastPositionRepository.generation = nil
 
+---Initialize repository: resolve savegame slot and generation counter
 function PlayerLastPositionRepository.initialize()
     PlayerLastPositionRepository.savegameId = "savegame" .. tostring(g_currentMission.missionInfo.savegameIndex)
 
@@ -47,11 +43,12 @@ function PlayerLastPositionRepository.initialize()
     end
 end
 
----@param playerKey string
----@param x number
----@param y number
----@param z number
----@param yaw number
+---Save player position to XML
+-- @param string playerKey Unique player identifier
+-- @param number x World X coordinate
+-- @param number y World Y coordinate
+-- @param number z World Z coordinate
+-- @param number yaw Y rotation in radians
 function PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
     local filePath = PlayerLastPositionRepository.getFilePath(playerKey)
     local xmlId = createXMLFile("playerPos", filePath, "position")
@@ -72,8 +69,9 @@ function PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
         PlayerLastPositionRepository.sanitizeKey(playerKey), x, y, z)
 end
 
----@param playerKey string
----@return table|nil {x, y, z, yaw}
+---Load player position from XML
+-- @param string playerKey Unique player identifier
+-- @return table|nil position {x, y, z, yaw} or nil if not found or generation mismatch
 function PlayerLastPositionRepository.load(playerKey)
     local filePath = PlayerLastPositionRepository.getFilePath(playerKey)
     if not fileExists(filePath) then
@@ -103,7 +101,8 @@ function PlayerLastPositionRepository.load(playerKey)
     return { x = x, y = y, z = z, yaw = yaw or 0 }
 end
 
----@param playerKey string
+---Remove saved position file
+-- @param string playerKey Unique player identifier
 function PlayerLastPositionRepository.remove(playerKey)
     local filePath = PlayerLastPositionRepository.getFilePath(playerKey)
     if fileExists(filePath) then
@@ -111,8 +110,9 @@ function PlayerLastPositionRepository.remove(playerKey)
     end
 end
 
----@param playerKey string
----@return string
+---Build file path for player position XML
+-- @param string playerKey Unique player identifier
+-- @return string filePath Absolute path to player XML file
 function PlayerLastPositionRepository.getFilePath(playerKey)
     local baseDir = getUserProfileAppPath() .. PlayerLastPositionRepository.MOD_SETTINGS_DIR
     createFolder(baseDir)
@@ -121,8 +121,9 @@ function PlayerLastPositionRepository.getFilePath(playerKey)
     return dir .. PlayerLastPositionRepository.sanitizeKey(playerKey) .. ".xml"
 end
 
----@param key string
----@return string
+---Sanitize player key for safe filesystem usage
+-- @param string key Raw player key
+-- @return string sanitized Safe key with non-alphanumeric chars replaced
 function PlayerLastPositionRepository.sanitizeKey(key)
     if key == nil then
         return "unknown"
