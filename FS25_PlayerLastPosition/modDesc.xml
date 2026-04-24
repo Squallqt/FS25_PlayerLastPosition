@@ -7,6 +7,27 @@
         <de>Letzte Spielerposition</de>
         <fr>Dernière Position Du Joueur</fr>
         <pl>Ostatnia Pozycja Gracza</pl>
+        <br>Última Posição do Jogador</br>
+        <cs>玩家最后位置</cs>
+        <ct>玩家最後位置</ct>
+        <cz>Poslední pozice hráče</cz>
+        <da>Spillerens Sidste Position</da>
+        <es>Última Posición del Jugador</es>
+        <fi>Pelaajan Viimeisin Sijainti</fi>
+        <hu>Játékos Utolsó Pozíciója</hu>
+        <id>Posisi Terakhir Pemain</id>
+        <it>Ultima Posizione del Giocatore</it>
+        <jp>プレイヤーの最終位置</jp>
+        <kr>플레이어 마지막 위치</kr>
+        <nl>Laatste Positie Speler</nl>
+        <no>Spillerens Siste Posisjon</no>
+        <pt>Última Posição do Jogador</pt>
+        <ro>Ultima Poziție a Jucătorului</ro>
+        <ru>Последняя Позиция Игрока</ru>
+        <sv>Spelarens Senaste Position</sv>
+        <tr>Oyuncunun Son Konumu</tr>
+        <uk>Остання Позиція Гравця</uk>
+        <vn>Vị Trí Cuối Của Người Chơi</vn>
     </title>
     <description>
         <en><![CDATA[Saves each player's position on disconnect, independently of the server save cycle.
@@ -14,7 +35,7 @@ Players are teleported back to their last position on reconnection.
 Works on foot and in vehicles.
 Compatible with singleplayer, multiplayer and dedicated servers.
 
-GitHub repository: https://github.com/Squallqt/FS25_PlayerLastPosition
+Issues & suggestions: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog:
 
@@ -30,7 +51,7 @@ Spieler werden bei Wiederverbindung an ihre letzte Position teleportiert.
 Funktioniert zu Fuß und in Fahrzeugen.
 Kompatibel mit Einzelspieler, Mehrspieler und dedizierten Servern.
 
-GitHub-Repository: https://github.com/Squallqt/FS25_PlayerLastPosition
+Issues & Vorschläge: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog:
 
@@ -46,7 +67,7 @@ Les joueurs sont téléportés à leur dernière position à la reconnexion.
 Fonctionne à pied et en véhicule.
 Compatible solo, multijoueur et serveur dédié.
 
-Dépôt GitHub : https://github.com/Squallqt/FS25_PlayerLastPosition
+Issues & suggestions: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog :
 
@@ -62,7 +83,7 @@ Gracze są teleportowani na ostatnią pozycję po ponownym połączeniu.
 Działa pieszo i w pojazdach.
 Kompatybilny z trybem jednoosobowym, wieloosobowym i serwerami dedykowanymi.
 
-Repozytorium GitHub: https://github.com/Squallqt/FS25_PlayerLastPosition
+Issues & sugestie: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog:
 
