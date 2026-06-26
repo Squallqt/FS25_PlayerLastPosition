@@ -1,33 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="107">
+<modDesc descVersion="110">
     <author>Squallqt</author>
-    <version>1.0.1.0</version>
+    <version>1.0.2.0</version>
     <title>
         <en>Player Last Position</en>
         <de>Letzte Spielerposition</de>
         <fr>Dernière Position Du Joueur</fr>
-        <pl>Ostatnia Pozycja Gracza</pl>
-        <br>Última Posição do Jogador</br>
-        <cs>玩家最后位置</cs>
-        <ct>玩家最後位置</ct>
-        <cz>Poslední pozice hráče</cz>
-        <da>Spillerens Sidste Position</da>
-        <es>Última Posición del Jugador</es>
-        <fi>Pelaajan Viimeisin Sijainti</fi>
-        <hu>Játékos Utolsó Pozíciója</hu>
-        <id>Posisi Terakhir Pemain</id>
-        <it>Ultima Posizione del Giocatore</it>
-        <jp>プレイヤーの最終位置</jp>
-        <kr>플레이어 마지막 위치</kr>
-        <nl>Laatste Positie Speler</nl>
-        <no>Spillerens Siste Posisjon</no>
-        <pt>Última Posição do Jogador</pt>
-        <ro>Ultima Poziție a Jucătorului</ro>
-        <ru>Последняя Позиция Игрока</ru>
-        <sv>Spelarens Senaste Position</sv>
-        <tr>Oyuncunun Son Konumu</tr>
-        <uk>Остання Позиція Гравця</uk>
-        <vn>Vị Trí Cuối Của Người Chơi</vn>
     </title>
     <description>
         <en><![CDATA[Saves each player's position on disconnect, independently of the server save cycle.
@@ -39,13 +17,19 @@ Issues & suggestions: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog:
 
+1.0.2.0:
+- Minor script optimizations
+- Fixed position being lost if the game was quit without saving after reconnecting
 1.0.1.0:
-- Save position on game save to handle singleplayer Alt+F4 edge case
-- Fix player rotation not being restored on reconnect
+- Saved position on game save to handle singleplayer Alt+F4 edge case
+- Fixed player rotation not being restored on reconnect
 1.0.0.1:
-- Fix saved positions being shared across different savegames
+- Fixed saved positions being shared across different savegames
 1.0.0.0:
-- Initial release]]></en>
+- Initial release
+
+© 2026 Squallqt. All rights reserved.
+Please download this mod only from the official Farming Simulator ModHub and keep the original link. Reuploading, redistribution, modification or copying of this mod or any of its files, in whole or in part, is not permitted without the author's written consent.]]></en>
         <de><![CDATA[Speichert die Position jedes Spielers beim Trennen, unabhängig vom Server-Speicherzyklus.
 Spieler werden bei Wiederverbindung an ihre letzte Position teleportiert.
 Funktioniert zu Fuß und in Fahrzeugen.
@@ -55,13 +39,19 @@ Issues & Vorschläge: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog:
 
+1.0.2.0:
+- Kleinere Skript-Optimierungen
+- Positionsverlust beim Beenden ohne Speichern nach dem Einloggen korrigiert
 1.0.1.0:
 - Position wird beim Spielstand-Speichern gesichert (Einzelspieler Alt+F4 Sonderfall)
 - Spielerrotation wird jetzt beim Wiederherstellen korrekt angewendet
 1.0.0.1:
 - Gespeicherte Positionen werden nicht mehr zwischen Spielständen geteilt
 1.0.0.0:
-- Erstveröffentlichung]]></de>
+- Erstveröffentlichung
+
+© 2026 Squallqt. Alle Rechte vorbehalten.
+Bitte lade diesen Mod ausschließlich aus dem offiziellen Farming Simulator ModHub herunter und behalte den originalen Link bei. Das erneute Hochladen, die Weitergabe, Veränderung oder das Kopieren dieses Mods oder seiner Dateien, ganz oder teilweise, ist ohne die schriftliche Zustimmung des Autors nicht gestattet.]]></de>
         <fr><![CDATA[Mémorise la position de chaque joueur à la déconnexion, indépendamment de la sauvegarde serveur.
 Les joueurs sont téléportés à leur dernière position à la reconnexion.
 Fonctionne à pied et en véhicule.
@@ -71,29 +61,19 @@ Issues & suggestions: https://github.com/Squallqt/FS25_PlayerLastPosition
 
 Changelog :
 
+1.0.2.0 :
+- Optimisations mineures du script
+- Correction de la perte de position lors d'une sortie sans sauvegarde après reconnexion
 1.0.1.0 :
 - Sauvegarde de la position lors de la sauvegarde de partie (edge case Alt+F4 en solo)
 - Correction de la rotation du joueur non restaurée à la reconnexion
 1.0.0.1 :
 - Correction des positions partagées entre différentes sauvegardes
 1.0.0.0 :
-- Version initiale]]></fr>
-        <pl><![CDATA[Zapisuje pozycję każdego gracza przy rozłączeniu, niezależnie od cyklu zapisu serwera.
-Gracze są teleportowani na ostatnią pozycję po ponownym połączeniu.
-Działa pieszo i w pojazdach.
-Kompatybilny z trybem jednoosobowym, wieloosobowym i serwerami dedykowanymi.
+- Version initiale
 
-Issues & sugestie: https://github.com/Squallqt/FS25_PlayerLastPosition
-
-Changelog:
-
-1.0.1.0:
-- Zapis pozycji podczas zapisywania gry (przypadek Alt+F4 w trybie jednoosobowym)
-- Korekta rotacji gracza nieodtwarzanej przy ponownym połączeniu
-1.0.0.1:
-- Korekta pozycji współdzielonych między różnymi zapisami gry
-1.0.0.0:
-- Pierwsza wersja]]></pl>
+© 2026 Squallqt. Tous droits réservés.
+Merci de télécharger ce mod uniquement depuis le ModHub officiel de Farming Simulator et de conserver le lien original. La remise en ligne, la redistribution, la modification ou la copie de ce mod ou de l'un de ses fichiers, en tout ou partie, ne sont pas autorisées sans l'accord écrit de l'auteur.]]></fr>
     </description>
     <iconFilename>icon_PlayerLastPosition.dds</iconFilename>
     <multiplayer supported="true" />

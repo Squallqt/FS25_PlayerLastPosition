@@ -64,9 +64,6 @@ function PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
     end
     saveXMLFile(xmlId)
     delete(xmlId)
-
-    Logging.info("[PlayerLastPosition] Saved '%s' (%.1f, %.1f, %.1f)",
-        PlayerLastPositionRepository.sanitizeKey(playerKey), x, y, z)
 end
 
 ---Load player position from XML
