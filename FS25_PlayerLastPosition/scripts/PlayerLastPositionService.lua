@@ -1,7 +1,7 @@
 -- Copyright © 2026 Squallqt. All rights reserved.
 -- Player lifecycle hooks: save on disconnect and game save, restore on reconnect. Server-side only.
--- Save: overwrittenFunction on Player.createData persists position on every serialization (disconnect, game save, Alt+F4).
--- Cleanup: prependedFunction on Player.delete clears tracking state only (no save — onCreateData already handles it).
+-- Save: Player.createData hook persists position during player data serialization.
+-- Cleanup: Player.delete clears in-memory tracking state.
 -- Restore: the engine parks new players at y=-200 then repositions them at spawn. We poll rootNode.y and teleport once the player leaves the parking zone (y > -100).
 PlayerLastPositionService = {}
 local PlayerLastPositionService_mt = Class(PlayerLastPositionService)
@@ -15,7 +15,6 @@ function PlayerLastPositionService.new()
     local self = setmetatable({}, PlayerLastPositionService_mt)
     self.knownPlayers    = {}
     self.pendingRestores = {}
-    self.hasWork         = false
     return self
 end
 
@@ -65,9 +64,8 @@ function PlayerLastPositionService.savePlayerPosition(player)
         if rootNode ~= nil and rootNode ~= 0 then
             local rx, ry, rz = getWorldTranslation(rootNode)
             if rx ~= nil and ry ~= nil and rz ~= nil then
-                local dx, _, dz = localDirectionToWorld(rootNode, 0, 0, 1)
                 x, y, z = rx, ry, rz
-                yaw = MathUtil.getYRotationFromDirection(dx, dz)
+                yaw = player:getMovementYaw()
             end
         end
     end
@@ -79,7 +77,7 @@ function PlayerLastPositionService.savePlayerPosition(player)
     PlayerLastPositionRepository.save(playerKey, x, y, z, yaw)
 end
 
----Clear tracking on player disconnect (save handled by onCreateData)
+---Clear in-memory tracking when player object is deleted
 -- @param table player Player instance
 function PlayerLastPositionService.onPlayerDelete(player)
     if player == nil or g_server == nil then
@@ -90,11 +88,10 @@ function PlayerLastPositionService.onPlayerDelete(player)
     local playerKey = PlayerLastPositionService.getPlayerKey(player)
     if playerKey ~= nil and service ~= nil and service.knownPlayers ~= nil then
         service.knownPlayers[playerKey] = nil
-        service.hasWork = true
     end
 end
 
----Save position during engine serialization (covers savegame writes)
+---Save position during player data serialization
 -- @param table player Player instance
 -- @param function superFunc Original createData function
 -- @return table playerData Serialized player data
@@ -132,13 +129,12 @@ function PlayerLastPositionService.onUpdate(mission, dt)
                         position = saved,
                         player   = player
                     }
-                    service.hasWork = true
                 end
             end
         end
     end
 
-    if not service.hasWork then
+    if next(service.pendingRestores) == nil then
         return
     end
 
@@ -172,22 +168,14 @@ function PlayerLastPositionService.onUpdate(mission, dt)
             local safeY = math.max(pos.y, terrainY + 0.2)
 
             setWorldTranslation(player.rootNode, pos.x, safeY, pos.z)
-            setWorldRotation(player.rootNode, 0, pos.yaw, 0)
+            player:setMovementYaw(pos.yaw)
 
-            Logging.info("[PlayerLastPosition] Restored '%s' to (%.1f, %.1f, %.1f, yaw=%.2f) after %dms",
-                PlayerLastPositionRepository.sanitizeKey(playerKey), pos.x, safeY, pos.z, pos.yaw, entry.timer)
-
-            PlayerLastPositionRepository.remove(playerKey)
             table.insert(toRemove, playerKey)
         end
     end
 
     for _, key in ipairs(toRemove) do
         service.pendingRestores[key] = nil
-    end
-
-    if next(service.pendingRestores) == nil then
-        service.hasWork = false
     end
 end
 
